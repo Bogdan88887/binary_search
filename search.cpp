@@ -2,8 +2,9 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <numeric>
 
-int binarySearch(const std::vector<int>& arr, int target) {
+std::pair<int, int> binarySearch(const std::vector<int>& arr, int target) {
     int low = 0;
     int high = arr.size() - 1;
     int steps = 0;
@@ -13,14 +14,14 @@ int binarySearch(const std::vector<int>& arr, int target) {
         int mid = (low + high) / 2;
 
         if (arr[mid] == target) {
-            return steps;
+            return {mid, steps}; // Возвращаем индекс и количество шагов
         } else if (arr[mid] < target) {
             low = mid + 1;
         } else {
             high = mid - 1;
         }
     }
-    return -1;
+    return {-1, steps}; // Если не найдено, возвращаем -1 и количество шагов
 }
 
 int main() {
@@ -41,12 +42,13 @@ int main() {
     std::cout << "Введите число для поиска: ";
     std::cin >> target;
 
-    int steps = binarySearch(randomNumbers, target);
+    auto [index, steps] = binarySearch(randomNumbers, target);
 
-    if (steps != -1) {
-        std::cout << "Элемент " << target << " найден за " << steps << " шагов." << std::endl;
+    if (index != -1) {
+        std::cout << "Элемент " << target << " найден на индексе " << index 
+                  << " за " << steps << " шагов." << std::endl;
     } else {
-        std::cout << "Элемент " << target << " не найден в массиве." << std::endl;
+        std::cout << "Элемент " << target << " не найден в массиве. Всего шагов: " << steps << "." << std::endl;
     }
 
     return 0;
